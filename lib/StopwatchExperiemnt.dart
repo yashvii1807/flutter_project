@@ -13,51 +13,64 @@ class _StopwatchExperiemntState extends State<StopwatchExperiemnt> {
   late Timer timer;
   bool isTicking = false;
   int millis = 0;
+  final laps = <int>[];
   String _secondtoText() => seconds <= 1 ? 'Second' : 'Seconds';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Stopwatch Experiment'),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
+      appBar: AppBar(title: const Text('Stopwatch Experiment')),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Center(
               child: Text(
                 '$seconds ${_secondtoText()}',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: isTicking ? null : _starttimer,
-                  style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.green),
-                    foregroundColor: MaterialStatePropertyAll(Colors.white),
-                  ),
-                  child: const Text("Start"),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: isTicking ? _stoptimer : null,
-                  style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.red),
-                    foregroundColor: MaterialStatePropertyAll(Colors.white),
-                  ),
-                  child: const Text("Stop"),
-                ),
-              ],
-            ),
-          ],
-        ));
+          ),
+          Expanded(child: controlPanel()),
+          Expanded(child: _buildDisplay()),
+        ],
+      ),
+    );
+  }
+
+  Row controlPanel() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: isTicking ? null : _starttimer,
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.green),
+            foregroundColor: MaterialStatePropertyAll(Colors.white),
+          ),
+          child: const Text("Start"),
+        ),
+        const SizedBox(width: 10),
+        ElevatedButton(
+          onPressed: isTicking ? _stoptimer : null,
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.red),
+            foregroundColor: MaterialStatePropertyAll(Colors.white),
+          ),
+          child: const Text("Stop"),
+        ),
+        const SizedBox(width: 10),
+        ElevatedButton(
+          onPressed: _lapClick,
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.amber),
+            foregroundColor: MaterialStatePropertyAll(Colors.white),
+          ),
+          child: const Text("Lap"),
+        ),
+      ],
+    );
   }
 
   @override
@@ -71,6 +84,17 @@ class _StopwatchExperiemntState extends State<StopwatchExperiemnt> {
       isTicking = true;
       millis = 0;
     });
+  }
+
+  // final laps = <int>[];
+  void _lapClick() {
+    if (isTicking) {
+      setState(() {
+        laps.add(millis);
+        millis = 0;
+      });
+    }
+    print(laps);
   }
 
   void _stoptimer() {
@@ -87,6 +111,17 @@ class _StopwatchExperiemntState extends State<StopwatchExperiemnt> {
         seconds = millis / 1000;
       });
     }
+  }
+
+  Widget _buildDisplay() {
+    return ListView(
+      children: [
+        for (int i in laps)
+          ListTile(
+            title: Text('Lap ${laps.indexOf(i) + 1}: ${i / 1000} seconds'),
+          ),
+      ],
+    );
   }
 
   @override
