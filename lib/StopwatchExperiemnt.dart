@@ -17,44 +17,47 @@ class _StopwatchExperiemntState extends State<StopwatchExperiemnt> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Stopwatch Experiment')),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
-              '$seconds ${_secondtoText()}',
-              style: Theme.of(context).textTheme.headlineMedium,
+        appBar: AppBar(
+          title: const Text('Stopwatch Experiment'),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Text(
+                '$seconds ${_secondtoText()}',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
             ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: isTicking ? null : _starttimer,
-                style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.green),
-                  foregroundColor: MaterialStatePropertyAll(Colors.white),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: isTicking ? null : _starttimer,
+                  style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(Colors.green),
+                    foregroundColor: MaterialStatePropertyAll(Colors.white),
+                  ),
+                  child: const Text("Start"),
                 ),
-                child: const Text("Start"),
-              ),
-              const SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: isTicking ? _stoptimer : null,
-                style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.red),
-                  foregroundColor: MaterialStatePropertyAll(Colors.white),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: isTicking ? _stoptimer : null,
+                  style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(Colors.red),
+                    foregroundColor: MaterialStatePropertyAll(Colors.white),
+                  ),
+                  child: const Text("Stop"),
                 ),
-                child: const Text("Stop"),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+              ],
+            ),
+          ],
+        ));
   }
 
   @override
