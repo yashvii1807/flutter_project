@@ -32,7 +32,7 @@ class _StopwatchExperiemntState extends State<StopwatchExperiemnt> {
             ),
           ),
           Expanded(child: controlPanel()),
-          Expanded(child: _buildDisplay()),
+          Expanded(child: _builderDisplay()),
         ],
       ),
     );
@@ -118,9 +118,23 @@ class _StopwatchExperiemntState extends State<StopwatchExperiemnt> {
       children: [
         for (int i in laps)
           ListTile(
+            leading: const Icon(Icons.timer),
             title: Text('Lap ${laps.indexOf(i) + 1}: ${i / 1000} seconds'),
+            trailing: const Icon(Icons.delete),
           ),
       ],
+    );
+  }
+
+  Widget _builderDisplay() {
+    return ListView.builder(
+      itemCount: laps.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: const Icon(Icons.timer),
+          title: Text('Lap ${index + 1}: ${laps[index] / 1000} seconds'),
+        );
+      },
     );
   }
 
