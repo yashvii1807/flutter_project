@@ -1,57 +1,94 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/StopwatchExperiemnt.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  TextEditingController userTxtCtr = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+  String name = "";
+  String email = "";
+  bool isloggedin = false;
 
-  TextEditingController pwdTxtCtr = TextEditingController();
-
-  String msg = "Message here";
+  TextEditingController t1 = TextEditingController();
+  TextEditingController t2 = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    print('from build method');
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Login',
-                style: TextStyle(fontSize: 50, color: Colors.deepPurple),
+    return Scaffold(body: _buildLoginForm());
+  }
+
+  Widget _buildLoginForm() {
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: EdgeInsets.all(30),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TextFormField(
+              controller: t1,
+              decoration: const InputDecoration(
+                labelText: 'User Name',
+                border: OutlineInputBorder(),
               ),
-              Text('Username'),
-              TextField(controller: userTxtCtr),
-              Text('Password'),
-              TextField(controller: pwdTxtCtr, obscureText: true),
-              ElevatedButton(
-                onPressed: () {
-                  print(
-                    "Button clicked " + userTxtCtr.text + " " + pwdTxtCtr.text,
-                  );
-                  if (userTxtCtr.text == pwdTxtCtr.text) {
-                    msg = "Welcome " + userTxtCtr.text;
-                  } else {
-                    msg = "Invalid credentials";
-                  }
-                  print(msg);
-                  setState(() {});
-                },
-                child: Text('Login'),
+              validator: (text) => text!.isEmpty ? 'Enter Name' : null,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: t2,
+              decoration: const InputDecoration(
+                labelText: 'Email Address',
+                border: OutlineInputBorder(),
               ),
-              Text(msg),
-            ],
-          ),
+              validator: (text) {
+                if (text!.isEmpty) {
+                  return 'Email cannot be blank';
+                }
+                final regex =
+                    RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+                if (!regex.hasMatch(text)) {
+                  return 'Enter valid email address';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            ElevatedButton(
+              onPressed: _validateInput,
+              child: Text("Login "),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  void _validateInput() {
+    final form = _formKey.currentState;
+    if (form?.validate() == true) {
+      name = t1.text;
+      email = t2.text;
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (_) => StopwatchExperiemnt(name: name, email: email)));
+    } else {
+      print('Some values are missing in the form');
+    }
+  }
+
+  @override
+  void dispose() {
+    t1.dispose();
+    t2.dispose();
+    super.dispose();
   }
 }

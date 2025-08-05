@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class StopwatchExperiemnt extends StatefulWidget {
-  const StopwatchExperiemnt({super.key});
+  const StopwatchExperiemnt({super.key, required String name, required String email});
 
   @override
   State<StopwatchExperiemnt> createState() => _StopwatchExperiemntState();
